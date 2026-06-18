@@ -17,6 +17,14 @@ function observeReveals(){
   $$(".reveal:not(.in)").forEach(function(el){ _revealIO.observe(el); });
 }
 
+/* image helpers — real photos in images/<slug>.jpg, elegant gold fallback if missing */
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
+function slugify(s){return String(s).toLowerCase().replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");}
+function photoEl(slug, name, cls){
+  return '<div class="photo'+(cls?" "+cls:"")+'" data-name="'+esc(name)+'">'+
+    '<img src="images/'+slug+'.jpg" alt="'+esc(name)+'" loading="lazy" onerror="this.remove()"></div>';
+}
+
 /* ============================================================
    MENU DATA (full menu)
    ============================================================ */
@@ -121,38 +129,51 @@ var MENU = [
 ];
 
 /* ============================================================
-   SVG ICONS for features (no emoji)
-   ============================================================ */
-var ICONS = {
-  biryani:'<svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#22d3ee" stroke-width="1.7"><path d="M5 18a11 6 0 0 0 22 0"/><path d="M5 18a11 6 0 0 1 22 0"/><path d="M4 18h24l-2 6a3 3 0 0 1-3 2H9a3 3 0 0 1-3-2Z"/><path d="M12 8c0 2 2 2 2 4M18 6c0 2 2 2 2 4"/></svg>',
-  chili:'<svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#b06bff" stroke-width="1.7"><path d="M8 24c8 2 16-4 16-12 0-2 2-4 4-4"/><path d="M24 8c-1 3-3 4-5 4"/></svg>',
-  flame:'<svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#ffae3b" stroke-width="1.7"><path d="M16 4c4 6 8 7 8 13a8 8 0 1 1-16 0c0-3 2-5 3-7 1 2 2 2 3 2 0-4-1-7 2-11Z"/></svg>',
-  bowl:'<svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#6d8bff" stroke-width="1.7"><path d="M4 14h24a12 12 0 0 1-24 0Z"/><path d="M2 14h28"/><path d="M14 8c0-2 4-2 4 0"/></svg>',
-  leaf:'<svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#39e08a" stroke-width="1.7"><path d="M26 6C14 6 6 14 6 26c12 0 20-8 20-20Z"/><path d="M10 22 22 10"/></svg>',
-  dessert:'<svg viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#ffae3b" stroke-width="1.7"><path d="M8 14h16l-2 12H10Z"/><circle cx="16" cy="9" r="3"/></svg>'
-};
-
-/* ============================================================
-   FEATURED / SIGNATURE
+   FEATURED / SIGNATURE (with photos)
    ============================================================ */
 var FEATURES = [
-  {ic:"biryani", n:"Chicken Biryani", p:"16.99", d:"Aromatic basmati layered with spiced chicken, fried onions & herbs.", pop:true},
-  {ic:"chili", n:"Chicken 65", p:"12.99", d:"Marinated boneless chicken fried to perfection with a fiery kick.", pop:true},
-  {ic:"bowl", n:"Butter Chicken", p:"17.99", d:"Creamy tomato curry with tender chicken & aromatic spices.", pop:true},
-  {ic:"flame", n:"Wah! Taj Platter", p:"32.99", d:"Tikka, tandoori chicken, seekh kabob, beef bihari & malai boti.", pop:true},
-  {ic:"leaf", n:"Palak Paneer", p:"14.99", d:"Soft paneer in a smooth, spiced spinach gravy.", veg:true},
-  {ic:"dessert", n:"Mango Lassi", p:"7.99", d:"Cool, sweet mango blended with creamy yogurt.", pop:true}
+  {slug:"chicken-biryani", n:"Chicken Biryani", p:"16.99", d:"Aromatic basmati layered with spiced chicken, fried onions & herbs.", pop:true},
+  {slug:"chicken-65", n:"Chicken 65", p:"12.99", d:"Marinated boneless chicken fried to perfection with a fiery kick.", pop:true},
+  {slug:"butter-chicken", n:"Butter Chicken", p:"17.99", d:"Creamy tomato curry with tender chicken & aromatic spices.", pop:true},
+  {slug:"mixed-grill-platter", n:"Wah! Taj Platter", p:"32.99", d:"Tikka, tandoori chicken, seekh kabob, beef bihari & malai boti.", pop:true},
+  {slug:"palak-paneer", n:"Palak Paneer", p:"14.99", d:"Soft paneer in a smooth, spiced spinach gravy.", veg:true},
+  {slug:"mango-lassi", n:"Mango Lassi", p:"7.99", d:"Cool, sweet mango blended with creamy yogurt.", pop:true}
 ];
 (function renderFeatures(){
   var g = $("#featureGrid"); if(!g) return;
   g.innerHTML = FEATURES.map(function(f,i){
-    return '<article class="feature glass reveal" data-d="'+(i%3)+'">'+
-      (f.pop?'<span class="fav-badge">Popular</span>':'')+
-      '<div class="ficon">'+ICONS[f.ic]+'</div>'+
-      '<h3>'+f.n+'</h3>'+
-      '<p class="fdesc">'+f.d+'</p>'+
-      '<div class="fprice">From <b>$'+f.p+'</b></div>'+
+    return '<article class="feature reveal" data-d="'+(i%3)+'">'+
+      '<div class="feature-photo">'+ photoEl(f.slug, f.n) + (f.pop?'<span class="fav-badge">Popular</span>':'') +'</div>'+
+      '<div class="feature-body">'+
+        '<h3>'+f.n+'</h3>'+
+        '<p class="fdesc">'+f.d+'</p>'+
+        '<div class="fprice">From <b>$'+f.p+'</b></div>'+
+      '</div>'+
     '</article>';
+  }).join("");
+})();
+
+/* ============================================================
+   GALLERY (real photos)
+   ============================================================ */
+(function renderGallery(){
+  var g = $("#galleryGrid"); if(!g) return;
+  var TILES = [
+    {slug:"chicken-biryani",    t:"Chicken Biryani",   s:"Signature",  cls:"big"},
+    {slug:"butter-chicken",     t:"Butter Chicken",    s:"Curry"},
+    {slug:"seekh-kabab",        t:"Seekh Kabab",       s:"From the Grill"},
+    {slug:"mixed-grill-platter",t:"Wah! Taj Platter",  s:"Grill",      cls:"wide"},
+    {slug:"chicken-65",         t:"Chicken 65",        s:"Fan Favorite"},
+    {slug:"tandoori-chicken",   t:"Tandoori Boti",     s:"Tandoor"},
+    {slug:"palak-paneer",       t:"Palak Paneer",      s:"Vegetarian"},
+    {slug:"gulab-jamun",        t:"Gulab Jamun",       s:"Dessert"}
+  ];
+  g.innerHTML = TILES.map(function(t,i){
+    return '<figure class="gtile reveal '+(t.cls||"")+'" data-d="'+(i%3)+'">'+
+      photoEl(t.slug, t.t) +
+      '<div class="veil"></div>'+
+      '<figcaption class="gcap"><div class="gs">'+t.s+'</div><div class="gt">'+t.t+'</div></figcaption>'+
+    '</figure>';
   }).join("");
 })();
 
@@ -179,6 +200,7 @@ var FEATURES = [
 
   function itemHTML(it){
     return '<div class="menu-item">'+
+      '<div class="mi-thumb">'+ photoEl(slugify(it.n), it.n) +'</div>'+
       '<div class="mi-body">'+
         '<div class="mi-head"><span class="mi-name">'+
           (it.veg?'<span class="veg-dot" title="Vegetarian" aria-label="Vegetarian"></span>':'')+
@@ -306,15 +328,15 @@ var FEATURES = [
       var py=n.y - par;
       ctx.beginPath();
       ctx.arc(n.x, py, n.r, 0, Math.PI*2);
-      ctx.fillStyle="rgba(120,180,255,.85)";
+      ctx.fillStyle="rgba(212,175,55,.85)";
       ctx.fill();
       for(var j=i+1;j<nodes.length;j++){
         var m=nodes[j], dx=n.x-m.x, dy=n.y-m.y, dist=Math.sqrt(dx*dx+dy*dy);
         if(dist<130){
-          var a=(1-dist/130)*.5;
+          var a=(1-dist/130)*.45;
           var grd=ctx.createLinearGradient(n.x,py,m.x,m.y-par);
-          grd.addColorStop(0,"rgba(34,211,238,"+a+")");
-          grd.addColorStop(1,"rgba(176,107,255,"+a+")");
+          grd.addColorStop(0,"rgba(236,213,137,"+a+")");
+          grd.addColorStop(1,"rgba(164,126,34,"+a+")");
           ctx.strokeStyle=grd; ctx.lineWidth=.7;
           ctx.beginPath(); ctx.moveTo(n.x,py); ctx.lineTo(m.x,m.y-par); ctx.stroke();
         }
@@ -324,7 +346,7 @@ var FEATURES = [
   }
   function staticFrame(){
     init(); ctx.clearRect(0,0,w,h);
-    nodes.forEach(function(n){ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle="rgba(120,180,255,.5)";ctx.fill();});
+    nodes.forEach(function(n){ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle="rgba(212,175,55,.5)";ctx.fill();});
   }
   window.addEventListener("resize", size, {passive:true});
   window.addEventListener("mousemove", function(e){
@@ -341,7 +363,7 @@ var FEATURES = [
    ============================================================ */
 (function(){
   var helix = $("#helix"); if(!helix) return;
-  var N = 26, colors=["#22d3ee","#6d8bff","#b06bff","#ffae3b"];
+  var N = 26, colors=["#f6e6a8","#d4af37","#a47e22","#ecd589"];
   var html="";
   for(var i=0;i<N;i++){
     var t=i/N;
