@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cavallino — Ferrari Showroom</title>
+<meta name="description" content="Cavallino is a private Ferrari showroom and atelier. Discover featured models, explore the gallery, configure your own, and book a private viewing." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  --black:#0a0a0b;
+  --charcoal:#111113;
+  --charcoal-2:#17171a;
+  --surface:#1c1c20;
+  --grey:#2a2a30;
+  --grey-line:#33333a;
+  --muted:#9a9aa3;
+  --muted-2:#6c6c75;
+  --white:#f5f3ee;
+
+  --gold:#d4af37;
+  --gold-bright:#eccd6e;
+  --gold-deep:#a47e22;
+  --gold-grad:linear-gradient(135deg,#f6e29a 0%,#d4af37 38%,#a47e22 100%);
+
+  --ff-display:"Playfair Display", "Georgia", "Times New Roman", serif;
+  --ff-body:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --max:1240px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+
+  --nav-h:76px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+
+body{
+  font-family:var(--ff-body);
+  background:var(--black);
+  color:var(--white);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* film-grain + vignette atmosphere */
+body::before{
+  content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 120% at 50% 0%,transparent 55%,rgba(0,0,0,.55) 100%);
+  mix-blend-mode:multiply;
+}
+
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px;border-radius:2px}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+section{position:relative;z-index:2}
+
+/* ---------- shared type ---------- */
+.eyebrow{
+  font-size:12px;font-weight:600;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--gold);display:inline-flex;align-items:center;gap:12px;
+}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--gold);opacity:.7}
+.eyebrow.center::after{content:"";width:34px;height:1px;background:var(--gold);opacity:.7}
+
+h1,h2,h3{font-family:var(--ff-display);font-weight:600;line-height:1.04;letter-spacing:-.01em}
+.section-title{font-size:clamp(2rem,5vw,3.6rem);margin:18px 0 0}
+.section-title em{font-style:italic;color:var(--gold)}
+.lede{color:var(--muted);max-width:48ch;margin-top:18px;font-size:1.02rem}
+
+.gold-text{
+  background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:52px;padding:0 30px;border-radius:2px;font-weight:600;font-size:.83rem;
+  letter-spacing:.16em;text-transform:uppercase;transition:.4s var(--ease);position:relative;overflow:hidden;
+}
+.btn-gold{background:var(--gold-grad);color:#1a1505;box-shadow:0 10px 30px -12px rgba(212,175,55,.6)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 18px 40px -14px rgba(212,175,55,.75)}
+.btn-ghost{border:1px solid var(--grey-line);color:var(--white)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-bright);background:rgba(212,175,55,.05)}
+.btn .arrow{transition:transform .4s var(--ease)}
+.btn:hover .arrow{transform:translateX(4px)}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.nav{
+  position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:100;
+  display:flex;align-items:center;
+  transition:background .5s var(--ease),border-color .5s var(--ease),height .4s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(10,10,11,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--grey-line);height:64px;
+}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;width:100%}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--ff-display);font-size:1.3rem;font-weight:700;letter-spacing:.02em}
+.brand .emblem{width:34px;height:34px;flex:none}
+.brand small{font-family:var(--ff-body);font-size:.58rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);display:block;line-height:1;margin-top:3px}
+.nav-links{display:flex;gap:38px;align-items:center}
+.nav-links a{font-size:.82rem;letter-spacing:.08em;color:var(--muted);transition:color .3s;position:relative;padding:6px 0}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .35s var(--ease)}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{min-height:42px;padding:0 22px}
+.burger{display:none;flex-direction:column;gap:5px;padding:10px;width:44px;height:44px;align-items:center;justify-content:center}
+.burger span{width:24px;height:2px;background:var(--white);transition:.3s var(--ease)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  min-height:100vh;min-height:100svh;display:flex;align-items:center;
+  padding-top:var(--nav-h);overflow:hidden;
+  background:
+    radial-gradient(80% 60% at 78% 18%,rgba(212,175,55,.10),transparent 60%),
+    linear-gradient(180deg,#08080a 0%,#0c0c0f 60%,#0a0a0b 100%);
+}
+/* moving spotlight */
+.hero::before{
+  content:"";position:absolute;width:120vmax;height:120vmax;left:50%;top:-20%;
+  transform:translateX(-50%);
+  background:radial-gradient(circle at center,rgba(212,175,55,.07),transparent 42%);
+  animation:sweep 14s var(--ease) infinite alternate;pointer-events:none;
+}
+@keyframes sweep{from{transform:translateX(-70%) scale(1)}to{transform:translateX(-30%) scale(1.15)}}
+
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;width:100%}
+.hero-copy{max-width:600px}
+.hero h1{font-size:clamp(2.8rem,7.4vw,6rem);font-weight:700;margin:24px 0 0}
+.hero h1 .l{display:block;overflow:hidden}
+.hero h1 .l span{display:block;transform:translateY(110%);animation:rise 1s var(--ease-out) forwards}
+.hero h1 .l:nth-child(2) span{animation-delay:.12s}
+.hero h1 .l:nth-child(2) span{font-style:italic;color:var(--gold)}
+@keyframes rise{to{transform:translateY(0)}}
+.hero .eyebrow{opacity:0;animation:fade .8s var(--ease) .1s forwards}
+.hero-sub{color:var(--muted);font-size:1.08rem;max-width:46ch;margin:26px 0 34px;opacity:0;animation:fade .9s var(--ease) .5s forwards}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fade .9s var(--ease) .7s forwards}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-stats{display:flex;gap:40px;margin-top:54px;opacity:0;animation:fade .9s var(--ease) .9s forwards}
+.hero-stats .num{font-family:var(--ff-display);font-size:2rem;color:var(--white)}
+.hero-stats .lbl{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);margin-top:2px}
+
+/* hero car visual */
+.hero-visual{position:relative;display:flex;align-items:center;justify-content:center;min-height:380px;opacity:0;animation:fade 1.2s var(--ease) .4s forwards}
+.hero-visual .glow{position:absolute;width:90%;height:60%;background:radial-gradient(ellipse at center,rgba(212,175,55,.16),transparent 70%);filter:blur(20px)}
+.hero-car{width:100%;max-width:560px;position:relative;z-index:2;filter:drop-shadow(0 40px 50px rgba(0,0,0,.6));animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-car .reflection{opacity:.18;transform:scaleY(-1);filter:blur(3px)}
+
+.scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted-2);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;z-index:3}
+.scroll-cue .line{width:1px;height:40px;background:linear-gradient(var(--gold),transparent);overflow:hidden;position:relative}
+.scroll-cue .line::after{content:"";position:absolute;top:0;left:0;width:100%;height:40%;background:var(--gold-bright);animation:drop 1.8s var(--ease) infinite}
+@keyframes drop{0%{transform:translateY(-100%)}100%{transform:translateY(250%)}}
+
+/* ---------- marquee ---------- */
+.marquee{border-block:1px solid var(--grey-line);background:var(--charcoal);overflow:hidden;padding:22px 0}
+.marquee-track{display:flex;gap:60px;white-space:nowrap;width:max-content;animation:scrollx 32s linear infinite;will-change:transform}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee span{font-family:var(--ff-display);font-style:italic;font-size:1.4rem;color:var(--muted-2);display:inline-flex;align-items:center;gap:60px}
+.marquee span::after{content:"●";color:var(--gold);font-style:normal;font-size:.5rem;vertical-align:middle}
+@keyframes scrollx{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   SECTION SHELL + reveal
+   ============================================================ */
+.pad{padding:120px 0}
+.head{margin-bottom:64px;max-width:760px}
+.head.center{margin-inline:auto;text-align:center}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.08s}
+.reveal[data-d="2"]{transition-delay:.16s}
+.reveal[data-d="3"]{transition-delay:.24s}
+
+/* ============================================================
+   FEATURED MODELS
+   ============================================================ */
+.models{background:linear-gradient(180deg,var(--black),var(--charcoal) 40%,var(--black))}
+.model-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{
+  background:linear-gradient(160deg,var(--charcoal-2),var(--charcoal));
+  border:1px solid var(--grey-line);border-radius:6px;padding:30px 28px 28px;
+  position:relative;overflow:hidden;transition:transform .5s var(--ease),border-color .5s var(--ease),box-shadow .5s var(--ease);
+}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% -10%,rgba(212,175,55,.12),transparent 60%);opacity:0;transition:opacity .5s}
+.card:hover{transform:translateY(-8px);border-color:rgba(212,175,55,.45);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.card:hover::after{opacity:1}
+.card .tier{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.card .car-figure{height:150px;display:flex;align-items:center;justify-content:center;margin:8px 0 14px;position:relative;z-index:2}
+.card .car-figure svg{width:100%;max-width:280px;transition:transform .6s var(--ease)}
+.card:hover .car-figure svg{transform:translateX(6px) scale(1.04)}
+.card h3{font-size:1.7rem;position:relative;z-index:2}
+.card .desc{color:var(--muted);font-size:.92rem;margin:8px 0 20px;position:relative;z-index:2}
+.spec-row{display:flex;gap:8px;border-top:1px solid var(--grey-line);padding-top:18px;position:relative;z-index:2}
+.spec{flex:1}
+.spec .v{font-family:var(--ff-display);font-size:1.4rem;color:var(--white);font-variant-numeric:tabular-nums}
+.spec .v small{font-size:.7rem;color:var(--muted)}
+.spec .k{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-top:3px}
+
+/* ============================================================
+   GALLERY
+   ============================================================ */
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:16px}
+.tile{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--grey-line);background:var(--surface);cursor:pointer}
+.tile.big{grid-column:span 2;grid-row:span 2}
+.tile.wide{grid-column:span 2}
+.tile .bg{position:absolute;inset:0;transition:transform 1s var(--ease)}
+.tile:hover .bg{transform:scale(1.07)}
+.tile .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.85));z-index:2}
+.tile .cap{position:absolute;left:20px;bottom:18px;z-index:3;transform:translateY(8px);opacity:.85;transition:.5s var(--ease)}
+.tile:hover .cap{transform:translateY(0);opacity:1}
+.tile .cap .t{font-family:var(--ff-display);font-size:1.3rem}
+.tile .cap .s{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.tile .car-mini{position:absolute;z-index:2;left:50%;top:46%;transform:translate(-50%,-50%);width:78%;opacity:.92}
+
+/* ============================================================
+   CONFIGURATOR
+   ============================================================ */
+.config{background:radial-gradient(80% 100% at 80% 50%,rgba(212,175,55,.06),transparent 60%),var(--charcoal)}
+.config-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+.config-stage{
+  position:relative;background:
+    radial-gradient(60% 50% at 50% 80%,rgba(212,175,55,.10),transparent 70%),
+    linear-gradient(180deg,#0c0c0f,#050506);
+  border:1px solid var(--grey-line);border-radius:10px;padding:50px 40px;min-height:360px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.config-stage::after{content:"";position:absolute;bottom:34px;left:10%;right:10%;height:30px;background:radial-gradient(ellipse at center,rgba(0,0,0,.7),transparent 70%);filter:blur(6px)}
+#configCar{width:100%;max-width:480px;z-index:2;transition:transform .6s var(--ease)}
+.stage-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(70% 70% at 50% 60%,#000,transparent)}
+
+.opt-group{margin-bottom:30px}
+.opt-group .lbl{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between}
+.opt-group .lbl .val{color:var(--gold)}
+.swatches{display:flex;gap:12px;flex-wrap:wrap}
+.swatch{width:40px;height:40px;border-radius:50%;position:relative;border:2px solid transparent;transition:.3s var(--ease)}
+.swatch::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid transparent;transition:.3s}
+.swatch[aria-pressed="true"]::after{border-color:var(--gold)}
+.swatch:hover{transform:scale(1.08)}
+.pill-row{display:flex;gap:10px;flex-wrap:wrap}
+.pill{padding:10px 18px;border:1px solid var(--grey-line);border-radius:40px;font-size:.8rem;letter-spacing:.04em;color:var(--muted);transition:.3s var(--ease)}
+.pill[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-bright);background:rgba(212,175,55,.08)}
+.pill:hover{color:var(--white);border-color:var(--muted)}
+.config-summary{margin-top:34px;border-top:1px solid var(--grey-line);padding-top:24px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+.config-summary .price .k{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2)}
+.config-summary .price .v{font-family:var(--ff-display);font-size:2.2rem;color:var(--white);font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   HERITAGE STAT BAND
+   ============================================================ */
+.heritage{background:var(--black);border-block:1px solid var(--grey-line)}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center}
+.stat .n{font-family:var(--ff-display);font-size:clamp(2.4rem,5vw,3.6rem);background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.stat .c{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.stat+.stat{position:relative}
+.stat-grid>.stat:not(:first-child)::before{content:"";position:absolute;left:-15px;top:18%;bottom:18%;width:1px;background:var(--grey-line)}
+
+/* ============================================================
+   VISIT / CONTACT
+   ============================================================ */
+.visit{background:linear-gradient(180deg,var(--black),var(--charcoal))}
+.visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.info-item{display:flex;gap:18px;padding:22px 0;border-bottom:1px solid var(--grey-line)}
+.info-item .ic{width:44px;height:44px;flex:none;border:1px solid var(--grey-line);border-radius:50%;display:grid;place-items:center;color:var(--gold)}
+.info-item h4{font-family:var(--ff-body);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+.info-item p{margin-top:4px;font-size:1.05rem}
+.info-item p span{color:var(--muted);font-size:.92rem}
+
+.form{background:var(--charcoal-2);border:1px solid var(--grey-line);border-radius:8px;padding:34px}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.field label .req{color:var(--gold)}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--black);border:1px solid var(--grey-line);border-radius:4px;
+  padding:14px 16px;color:var(--white);font-family:inherit;font-size:.95rem;transition:border-color .3s,box-shadow .3s;min-height:50px;
+}
+.field textarea{min-height:96px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.12)}
+.field .err{color:#e9836b;font-size:.78rem;margin-top:6px;display:none}
+.field.invalid input,.field.invalid select{border-color:#e9836b}
+.field.invalid .err{display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-note{font-size:.8rem;color:var(--muted-2);margin-top:6px}
+.success-msg{display:none;align-items:center;gap:12px;background:rgba(212,175,55,.08);border:1px solid var(--gold-deep);color:var(--gold-bright);padding:14px 16px;border-radius:4px;margin-bottom:18px;font-size:.9rem}
+.success-msg.show{display:flex}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{background:var(--black);border-top:1px solid var(--grey-line);padding:60px 0 36px}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.foot-brand p{color:var(--muted);font-size:.9rem;margin-top:18px;max-width:34ch}
+.foot-col h5{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.foot-col a{display:block;color:var(--muted);font-size:.9rem;padding:6px 0;transition:color .3s}
+.foot-col a:hover{color:var(--white)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--grey-line);padding-top:24px;color:var(--muted-2);font-size:.78rem;flex-wrap:wrap;gap:12px}
+.disclaimer{max-width:60ch;line-height:1.5}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:10px}
+  .hero-visual{order:-1;min-height:300px}
+  .config-grid{grid-template-columns:1fr;gap:40px}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .nav-links,.nav-cta{display:none}
+  .nav-links.open{
+    display:flex;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;
+    background:rgba(10,10,11,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--grey-line);padding:10px 28px 24px;
+  }
+  .nav-links.open a{padding:16px 0;border-bottom:1px solid var(--grey-line);font-size:1rem}
+  .burger{display:flex}
+  .nav.open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav.open .burger span:nth-child(2){opacity:0}
+  .nav.open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .pad{padding:84px 0}
+  .model-grid{grid-template-columns:1fr}
+  .visit-grid{grid-template-columns:1fr;gap:36px}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px}
+  .stat-grid>.stat::before{display:none!important}
+  .hero-stats{gap:26px;flex-wrap:wrap}
+  .foot-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr;grid-auto-rows:180px}
+  .tile.big,.tile.wide{grid-column:span 1;grid-row:span 1}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Cavallino home">
+      <svg class="emblem" viewBox="0 0 40 40" aria-hidden="true">
+        <rect x="1" y="1" width="38" height="38" rx="4" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+        <path d="M20 9c-3 4-1 7-4 9 1-1 3-1 3 1 0 2-3 2-3 5 0 3 3 5 7 5 5 0 8-3 8-7 0-2-1-4-3-5 2-3 1-6-1-8 0 2-1 3-2 3 1-3-1-5-2-6-1 3 0 5-2 5 0-2 1-4-1-7z" fill="#d4af37"/>
+      </svg>
+      <span>CAVALLINO<small>Ferrari Showroom</small></span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <a href="#models">Models</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#configure">Configure</a>
+      <a href="#heritage">Heritage</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a href="#visit" class="btn btn-gold nav-cta">Book a Viewing</a>
+    <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Maranello · Private Atelier</span>
+        <h1>
+          <span class="l"><span>The Art of</span></span>
+          <span class="l"><span>Italian Speed</span></span>
+        </h1>
+        <p class="hero-sub">An invitation into Cavallino — a private showroom where every Ferrari is presented as it was meant to be experienced. Light, sound, and craftsmanship, in perfect balance.</p>
+        <div class="hero-actions">
+          <a href="#models" class="btn btn-gold">Explore the Collection <span class="arrow">→</span></a>
+          <a href="#configure" class="btn btn-ghost">Configure Yours</a>
+        </div>
+        <div class="hero-stats">
+          <div><div class="num gold-text">12</div><div class="lbl">Models in Salon</div></div>
+          <div><div class="num gold-text">1947</div><div class="lbl">Heritage Since</div></div>
+          <div><div class="num gold-text">24<span style="font-size:1.1rem">/7</span></div><div class="lbl">Private Concierge</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="glow"></div>
+        <div class="hero-car" id="heroCar">
+          <!-- car injected by JS (reused silhouette) -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="scroll-cue" href="#models" aria-label="Scroll to models">
+    <span>Scroll</span><span class="line"></span>
+  </a>
+</section>
+
+<!-- ===================== MARQUEE ===================== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>SF90 Stradale</span><span>296 GTB</span><span>Roma</span><span>Purosangue</span><span>812 Competizione</span><span>Daytona SP3</span>
+    <span>SF90 Stradale</span><span>296 GTB</span><span>Roma</span><span>Purosangue</span><span>812 Competizione</span><span>Daytona SP3</span>
+  </div>
+</div>
+
+<!-- ===================== FEATURED MODELS ===================== -->
+<section class="models pad" id="models">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">The Collection</span>
+      <h2 class="section-title">Featured <em>Models</em></h2>
+      <p class="lede">A curated selection currently presented on the salon floor. Each car is detailed, certified, and ready for a private appraisal.</p>
+    </div>
+    <div class="model-grid" id="modelGrid"><!-- cards injected --></div>
+  </div>
+</section>
+
+<!-- ===================== GALLERY ===================== -->
+<section class="pad" id="gallery" style="background:var(--charcoal)">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Inside the Salon</span>
+      <h2 class="section-title">The <em>Gallery</em></h2>
+      <p class="lede">Moments from the showroom floor — where engineering becomes sculpture under directed light.</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"><!-- tiles injected --></div>
+  </div>
+</section>
+
+<!-- ===================== CONFIGURATOR ===================== -->
+<section class="config pad" id="configure">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Tailor Made</span>
+      <h2 class="section-title">Configure <em>Yours</em></h2>
+      <p class="lede">Compose a specification in real time. Choose a livery, wheel finish, and brake caliper, then reserve a build slot with our atelier.</p>
+    </div>
+    <div class="config-grid">
+      <div class="config-stage reveal">
+        <div class="stage-grid"></div>
+        <div id="configCar"><!-- car injected --></div>
+      </div>
+      <div class="config-controls reveal" data-d="1">
+        <div class="opt-group">
+          <div class="lbl"><span>Livery</span><span class="val" id="colorName">Rosso Corsa</span></div>
+          <div class="swatches" id="colorSwatches" role="group" aria-label="Body colour"></div>
+        </div>
+        <div class="opt-group">
+          <div class="lbl"><span>Wheels</span><span class="val" id="wheelName">Gloss Black</span></div>
+          <div class="pill-row" id="wheelPills" role="group" aria-label="Wheel finish"></div>
+        </div>
+        <div class="opt-group">
+          <div class="lbl"><span>Brake Calipers</span><span class="val" id="caliperName">Giallo</span></div>
+          <div class="swatches" id="caliperSwatches" role="group" aria-label="Caliper colour"></div>
+        </div>
+        <div class="config-summary">
+          <div class="price">
+            <div class="k">Indicative from</div>
+            <div class="v" id="priceOut">€ 428,000</div>
+          </div>
+          <a href="#visit" class="btn btn-gold">Reserve Build <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HERITAGE ===================== -->
+<section class="heritage pad" id="heritage">
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="eyebrow center">Since 1947</span>
+      <h2 class="section-title">A Legacy in <em>Numbers</em></h2>
+    </div>
+    <div class="stat-grid" id="statGrid">
+      <div class="stat reveal"><div class="n" data-count="78">0</div><div class="c">Years of Racing</div></div>
+      <div class="stat reveal" data-d="1"><div class="n" data-count="243" data-suffix="">0</div><div class="c">Grand Prix Wins</div></div>
+      <div class="stat reveal" data-d="2"><div class="n" data-count="16">0</div><div class="c">Constructors' Titles</div></div>
+      <div class="stat reveal" data-d="3"><div class="n" data-count="9500" data-suffix="+">0</div><div class="c">Cars Delivered</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VISIT / CONTACT ===================== -->
+<section class="visit pad" id="visit">
+  <div class="wrap">
+    <div class="visit-grid">
+      <div class="reveal">
+        <span class="eyebrow">Private Viewing</span>
+        <h2 class="section-title">Visit the <em>Showroom</em></h2>
+        <p class="lede">Appointments are held privately, outside public hours. Tell us a little about your interest and our concierge will arrange your visit.</p>
+        <div style="margin-top:34px">
+          <div class="info-item">
+            <span class="ic" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
+            <div><h4>Address</h4><p>Viale Enzo Ferrari, 12<br><span>41053 Maranello, Modena · Italy</span></p></div>
+          </div>
+          <div class="info-item">
+            <span class="ic" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </span>
+            <div><h4>Hours</h4><p>By appointment<br><span>Mon – Sat · 09:00 – 19:00 CET</span></p></div>
+          </div>
+          <div class="info-item">
+            <span class="ic" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg>
+            </span>
+            <div><h4>Concierge</h4><p>concierge@cavallino.example<br><span>+39 0536 000 000</span></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" data-d="1">
+        <form class="form" id="bookForm" novalidate>
+          <div class="success-msg" id="successMsg" role="status" aria-live="polite">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 5 5L20 7"/></svg>
+            Thank you — your request has been received. Our concierge will be in touch shortly.
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="fn">First name <span class="req">*</span></label>
+              <input id="fn" name="fn" type="text" autocomplete="given-name" required />
+              <div class="err">Please enter your first name.</div>
+            </div>
+            <div class="field">
+              <label for="ln">Last name <span class="req">*</span></label>
+              <input id="ln" name="ln" type="text" autocomplete="family-name" required />
+              <div class="err">Please enter your last name.</div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="em">Email <span class="req">*</span></label>
+            <input id="em" name="em" type="email" autocomplete="email" required />
+            <div class="err">Please enter a valid email address.</div>
+          </div>
+          <div class="field">
+            <label for="model">Model of interest</label>
+            <select id="model" name="model">
+              <option>No preference</option>
+              <option>SF90 Stradale</option>
+              <option>296 GTB</option>
+              <option>Roma</option>
+              <option>Purosangue</option>
+              <option>Daytona SP3</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="msg">Message</label>
+            <textarea id="msg" name="msg" placeholder="Tell us about your ideal viewing…"></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold" style="width:100%">Request a Private Viewing <span class="arrow">→</span></button>
+          <p class="form-note">By submitting you agree to be contacted by our concierge. This is a concept demo — no data is stored.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top">
+          <svg class="emblem" viewBox="0 0 40 40" aria-hidden="true">
+            <rect x="1" y="1" width="38" height="38" rx="4" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+            <path d="M20 9c-3 4-1 7-4 9 1-1 3-1 3 1 0 2-3 2-3 5 0 3 3 5 7 5 5 0 8-3 8-7 0-2-1-4-3-5 2-3 1-6-1-8 0 2-1 3-2 3 1-3-1-5-2-6-1 3 0 5-2 5 0-2 1-4-1-7z" fill="#d4af37"/>
+          </svg>
+          <span>CAVALLINO<small>Ferrari Showroom</small></span>
+        </a>
+        <p>A concept private showroom celebrating the artistry of the marque from Maranello.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Showroom</h5>
+        <a href="#models">Models</a><a href="#gallery">Gallery</a><a href="#configure">Configure</a><a href="#heritage">Heritage</a>
+      </div>
+      <div class="foot-col">
+        <h5>Services</h5>
+        <a href="#visit">Private Viewing</a><a href="#configure">Tailor Made</a><a href="#visit">Concierge</a><a href="#visit">Delivery</a>
+      </div>
+      <div class="foot-col">
+        <h5>Connect</h5>
+        <a href="#">Instagram</a><a href="#">YouTube</a><a href="#">LinkedIn</a><a href="#visit">Contact</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Cavallino Atelier — Concept Showroom.</span>
+      <span class="disclaimer">Unofficial concept demo. Not affiliated with, endorsed by, or sponsored by Ferrari S.p.A. All marque and model names belong to their respective owners.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   SVG SPORTS-CAR SILHOUETTE (parametric, colourable)
+   ============================================================ */
+function carSVG(opts){
+  opts = opts || {};
+  var body   = opts.body   || "#d62828";
+  var rim    = opts.rim    || "#111";
+  var caliper= opts.caliper|| "#d4af37";
+  var id     = opts.id     || ("c"+Math.random().toString(36).slice(2,7));
+  return `
+  <svg viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sports car side profile">
+    <defs>
+      <linearGradient id="body-${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${body}" stop-opacity="1"/>
+        <stop offset="0.5" stop-color="${body}"/>
+        <stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+      </linearGradient>
+      <linearGradient id="glass-${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#cfe6ff" stop-opacity="0.85"/>
+        <stop offset="1" stop-color="#0b1a2b"/>
+      </linearGradient>
+      <radialGradient id="rim-${id}" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#777"/>
+        <stop offset="0.6" stop-color="${rim}"/>
+        <stop offset="1" stop-color="#000"/>
+      </radialGradient>
+    </defs>
+    <!-- body lower -->
+    <path d="M18 138
+             C 40 132, 70 130, 96 128
+             C 120 100, 168 86, 226 84
+             C 300 82, 352 92, 404 112
+             C 446 116, 486 122, 502 132
+             C 510 137, 510 146, 500 150
+             L 470 150
+             A 34 34 0 0 0 402 150
+             L 168 150
+             A 34 34 0 0 0 100 150
+             L 28 150
+             C 16 150, 12 142, 18 138 Z"
+          fill="url(#body-${id})"/>
+    <!-- cabin / roof -->
+    <path d="M150 128
+             C 176 96, 214 86, 250 86
+             C 300 86, 338 96, 372 116
+             L 360 122
+             C 322 108, 286 102, 250 104
+             C 214 106, 184 114, 168 128 Z"
+          fill="#0c0c0e" opacity="0.9"/>
+    <!-- glass -->
+    <path d="M176 124
+             C 196 102, 226 95, 252 95
+             C 288 95, 318 103, 346 118
+             L 320 119
+             C 296 110, 270 107, 246 109
+             C 218 111, 196 117, 186 125 Z"
+          fill="url(#glass-${id})"/>
+    <!-- side intake accent -->
+    <path d="M372 120 C 392 122, 416 126, 436 132 L 432 138 C 412 132, 392 128, 372 127 Z" fill="#000" opacity="0.45"/>
+    <!-- character line -->
+    <path d="M104 130 C 180 116, 320 116, 470 138" fill="none" stroke="#fff" stroke-opacity="0.18" stroke-width="2"/>
+    <!-- front splitter -->
+    <path d="M500 150 L 512 150 L 506 158 L 492 158 Z" fill="#000" opacity="0.6"/>
+
+    <!-- rear wheel -->
+    <g>
+      <circle cx="134" cy="150" r="33" fill="#0a0a0a"/>
+      <circle cx="134" cy="150" r="33" fill="none" stroke="#000" stroke-width="2"/>
+      <circle cx="134" cy="150" r="18" fill="url(#rim-${id})"/>
+      <g stroke="#d9d9d9" stroke-width="2.4" opacity="0.9">
+        <line x1="134" y1="134" x2="134" y2="166"/>
+        <line x1="118" y1="150" x2="150" y2="150"/>
+        <line x1="123" y1="139" x2="145" y2="161"/>
+        <line x1="123" y1="161" x2="145" y2="139"/>
+      </g>
+      <circle cx="134" cy="150" r="4" fill="#bbb"/>
+      <path d="M150 142 a14 14 0 0 1 0 16" stroke="${caliper}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- front wheel -->
+    <g>
+      <circle cx="436" cy="150" r="33" fill="#0a0a0a"/>
+      <circle cx="436" cy="150" r="33" fill="none" stroke="#000" stroke-width="2"/>
+      <circle cx="436" cy="150" r="18" fill="url(#rim-${id})"/>
+      <g stroke="#d9d9d9" stroke-width="2.4" opacity="0.9">
+        <line x1="436" y1="134" x2="436" y2="166"/>
+        <line x1="420" y1="150" x2="452" y2="150"/>
+        <line x1="425" y1="139" x2="447" y2="161"/>
+        <line x1="425" y1="161" x2="447" y2="139"/>
+      </g>
+      <circle cx="436" cy="150" r="4" fill="#bbb"/>
+      <path d="M452 142 a14 14 0 0 1 0 16" stroke="${caliper}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- headlight -->
+    <path d="M500 132 q8 2 8 8 l-10 1 q-2 -7 2 -9Z" fill="#fff" opacity="0.85"/>
+    <!-- taillight -->
+    <rect x="20" y="134" width="8" height="6" rx="2" fill="#ff3b3b" opacity="0.85"/>
+  </svg>`;
+}
+
+/* ----- inject hero car (with faint reflection) ----- */
+(function(){
+  var hero = document.getElementById('heroCar');
+  if(hero){ hero.innerHTML = carSVG({body:"#cf1020", rim:"#1a1a1a", caliper:"#d4af37", id:"hero"}); }
+})();
+
+/* ============================================================
+   FEATURED MODELS DATA + RENDER
+   ============================================================ */
+var models = [
+  {tier:"Hybrid · Berlinetta", name:"SF90 Stradale", body:"#cf1020",
+   desc:"The technological flagship — a plug-in hybrid with the soul of a Formula 1 car.",
+   specs:[["1,000","cv","Power"],["2.5","s","0–100"],["340","km/h","Top"]]},
+  {tier:"V6 Hybrid · GT", name:"296 GTB", body:"#d4af37",
+   desc:"A compact mid-engined berlinetta redefining fun behind the wheel.",
+   specs:[["830","cv","Power"],["2.9","s","0–100"],["330","km/h","Top"]]},
+  {tier:"V12 · Front-Engine", name:"Daytona SP3", body:"#e8e6e1",
+   desc:"An Icona series masterpiece — a naturally aspirated V12 wrapped in pure emotion.",
+   specs:[["840","cv","Power"],["2.85","s","0–100"],["340","km/h","Top"]]}
+];
+(function(){
+  var grid = document.getElementById('modelGrid');
+  if(!grid) return;
+  grid.innerHTML = models.map(function(m,i){
+    var specs = m.specs.map(function(s){
+      return '<div class="spec"><div class="v">'+s[0]+' <small>'+s[1]+'</small></div><div class="k">'+s[2]+'</div></div>';
+    }).join('');
+    return '<article class="card reveal" data-d="'+(i)+'">'+
+      '<div class="tier">'+m.tier+'</div>'+
+      '<div class="car-figure">'+carSVG({body:m.body,rim:"#141414",caliper:"#d4af37",id:"m"+i})+'</div>'+
+      '<h3>'+m.name+'</h3>'+
+      '<p class="desc">'+m.desc+'</p>'+
+      '<div class="spec-row">'+specs+'</div>'+
+    '</article>';
+  }).join('');
+})();
+
+/* ============================================================
+   GALLERY RENDER (CSS-art tiles, no external images)
+   ============================================================ */
+var tiles = [
+  {cls:"big",  t:"Salon Floor",     s:"Maranello",  bg:"linear-gradient(145deg,#16161a,#070708)", car:"#cf1020"},
+  {cls:"",     t:"Rosso Detail",    s:"Bodywork",   bg:"radial-gradient(circle at 30% 20%,#3a0e10,#0a0506)", car:"#d62828"},
+  {cls:"",     t:"Gold Hour",       s:"Lighting",   bg:"linear-gradient(160deg,#241d07,#0a0a0b)", car:"#d4af37"},
+  {cls:"wide", t:"The Atelier",     s:"Tailor Made",bg:"linear-gradient(120deg,#101014,#1c1c20)", car:"#e8e6e1"},
+  {cls:"",     t:"Carbon & Light",  s:"Materials",  bg:"radial-gradient(circle at 70% 30%,#1a1a1f,#050506)", car:"#16161a"},
+  {cls:"",     t:"Night Reveal",    s:"Events",     bg:"linear-gradient(200deg,#0b0b14,#060606)", car:"#cf1020"}
+];
+(function(){
+  var g = document.getElementById('galleryGrid');
+  if(!g) return;
+  g.innerHTML = tiles.map(function(t,i){
+    return '<figure class="tile reveal '+t.cls+'" data-d="'+(i%3)+'">'+
+      '<div class="bg" style="background:'+t.bg+'"></div>'+
+      '<div class="car-mini">'+carSVG({body:t.car,rim:"#101010",caliper:"#d4af37",id:"g"+i})+'</div>'+
+      '<div class="veil"></div>'+
+      '<figcaption class="cap"><div class="s">'+t.s+'</div><div class="t">'+t.t+'</div></figcaption>'+
+    '</figure>';
+  }).join('');
+})();
+
+/* ============================================================
+   CONFIGURATOR
+   ============================================================ */
+(function(){
+  var stage = document.getElementById('configCar');
+  if(!stage) return;
+
+  var state = { body:"#cf1020", bodyName:"Rosso Corsa", rim:"#101010", caliper:"#d4af37", caliperName:"Giallo", wheelName:"Gloss Black", base:380000, opt:48000 };
+
+  var colors = [
+    ["Rosso Corsa","#cf1020",0],
+    ["Giallo Modena","#f2c200",6000],
+    ["Nero Daytona","#0e0e10",4000],
+    ["Grigio Silverstone","#7a7d82",4000],
+    ["Bianco Avus","#eceae5",4000],
+    ["Blu Tour de France","#1c2b54",8000]
+  ];
+  var wheels = [
+    ["Gloss Black","#101010",0],
+    ["Silver Diamond","#c9ccce",3000],
+    ["Matte Gold","#b9962f",9000]
+  ];
+  var calipers = [
+    ["Giallo","#d4af37"],
+    ["Rosso","#d62828"],
+    ["Nero","#1a1a1a"],
+    ["Silver","#c9ccce"]
+  ];
+
+  function render(){
+    stage.innerHTML = carSVG({body:state.body, rim:state.rim, caliper:state.caliper, id:"cfg"});
+    // micro pop
+    stage.style.transform="scale(.985)";
+    requestAnimationFrame(function(){ stage.style.transform="scale(1)"; });
+    var total = state.base + state.opt;
+    document.getElementById('priceOut').textContent = "€ " + total.toLocaleString('en-US');
+  }
+
+  // body swatches
+  var cs = document.getElementById('colorSwatches');
+  cs.innerHTML = colors.map(function(c,i){
+    return '<button class="swatch" style="background:'+c[1]+(c[1]==='#eceae5'?';border-color:#444':'')+'" aria-pressed="'+(i===0)+'" aria-label="'+c[0]+'" data-c="'+c[1]+'" data-n="'+c[0]+'" data-p="'+c[2]+'"></button>';
+  }).join('');
+  cs.addEventListener('click',function(e){
+    var b=e.target.closest('.swatch'); if(!b)return;
+    cs.querySelectorAll('.swatch').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    state.body=b.dataset.c; state.bodyName=b.dataset.n; state.bodyP=+b.dataset.p;
+    document.getElementById('colorName').textContent=b.dataset.n;
+    recompute(); render();
+  });
+
+  // wheel pills
+  var wp = document.getElementById('wheelPills');
+  wp.innerHTML = wheels.map(function(w,i){
+    return '<button class="pill" aria-pressed="'+(i===0)+'" data-c="'+w[1]+'" data-n="'+w[0]+'" data-p="'+w[2]+'">'+w[0]+'</button>';
+  }).join('');
+  wp.addEventListener('click',function(e){
+    var b=e.target.closest('.pill'); if(!b)return;
+    wp.querySelectorAll('.pill').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    state.rim=b.dataset.c; state.wheelName=b.dataset.n; state.wheelP=+b.dataset.p;
+    document.getElementById('wheelName').textContent=b.dataset.n;
+    recompute(); render();
+  });
+
+  // caliper swatches
+  var cp = document.getElementById('caliperSwatches');
+  cp.innerHTML = calipers.map(function(c,i){
+    return '<button class="swatch" style="background:'+c[1]+'" aria-pressed="'+(i===0)+'" aria-label="'+c[0]+' calipers" data-c="'+c[1]+'" data-n="'+c[0]+'"></button>';
+  }).join('');
+  cp.addEventListener('click',function(e){
+    var b=e.target.closest('.swatch'); if(!b)return;
+    cp.querySelectorAll('.swatch').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    state.caliper=b.dataset.c; state.caliperName=b.dataset.n;
+    document.getElementById('caliperName').textContent=b.dataset.n;
+    render();
+  });
+
+  state.bodyP=0; state.wheelP=0;
+  function recompute(){ state.opt = 48000 + (state.bodyP||0) + (state.wheelP||0); }
+
+  render();
+})();
+
+/* ============================================================
+   NAVBAR scroll state + mobile menu
+   ============================================================ */
+(function(){
+  var nav=document.getElementById('nav'), links=document.getElementById('navLinks'), burger=document.getElementById('burger');
+  var onScroll=function(){ nav.classList.toggle('scrolled', window.scrollY>40); };
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  burger.addEventListener('click',function(){
+    var open=links.classList.toggle('open');
+    nav.classList.toggle('open',open);
+    burger.setAttribute('aria-expanded',open);
+  });
+  links.addEventListener('click',function(e){
+    if(e.target.tagName==='A'){ links.classList.remove('open'); nav.classList.remove('open'); burger.setAttribute('aria-expanded',false); }
+  });
+})();
+
+/* ============================================================
+   SCROLL REVEAL (IntersectionObserver)
+   ============================================================ */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els=document.querySelectorAll('.reveal');
+  if(reduce || !('IntersectionObserver' in window)){ els.forEach(function(el){el.classList.add('in');}); return; }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{threshold:.16, rootMargin:"0px 0px -8% 0px"});
+  els.forEach(function(el){io.observe(el);});
+})();
+
+/* ============================================================
+   COUNT-UP STATS
+   ============================================================ */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nums=document.querySelectorAll('[data-count]');
+  function run(el){
+    var target=+el.dataset.count, suf=el.dataset.suffix||"", dur=1400, t0=null;
+    if(reduce){ el.textContent=target.toLocaleString('en-US')+suf; return; }
+    function step(ts){
+      if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1);
+      var eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*eased).toLocaleString('en-US')+suf;
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if(!('IntersectionObserver' in window)){ nums.forEach(run); return; }
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ run(e.target); io.unobserve(e.target); } });
+  },{threshold:.6});
+  nums.forEach(function(n){io.observe(n);});
+})();
+
+/* ============================================================
+   CARD TILT (pointer, desktop only, reduced-motion safe)
+   ============================================================ */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(window.matchMedia('(hover: none)').matches) return;
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('pointermove',function(e){
+      var r=card.getBoundingClientRect();
+      var x=(e.clientX-r.left)/r.width-0.5, y=(e.clientY-r.top)/r.height-0.5;
+      card.style.transform='translateY(-8px) rotateX('+(-y*5)+'deg) rotateY('+(x*6)+'deg)';
+    });
+    card.addEventListener('pointerleave',function(){ card.style.transform=''; });
+  });
+})();
+
+/* ============================================================
+   FORM VALIDATION (inline, on blur + submit)
+   ============================================================ */
+(function(){
+  var form=document.getElementById('bookForm'); if(!form) return;
+  var success=document.getElementById('successMsg');
+  function validfield(f){
+    var input=f.querySelector('input,select,textarea'); if(!input) return true;
+    var ok=true;
+    if(input.required && !input.value.trim()) ok=false;
+    if(input.type==='email' && input.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) ok=false;
+    f.classList.toggle('invalid',!ok);
+    return ok;
+  }
+  form.querySelectorAll('.field input,.field select').forEach(function(inp){
+    inp.addEventListener('blur',function(){ validfield(inp.closest('.field')); });
+  });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var fields=form.querySelectorAll('.field'), allOk=true, firstBad=null;
+    fields.forEach(function(f){ if(!validfield(f)){ allOk=false; if(!firstBad)firstBad=f; } });
+    if(!allOk){ if(firstBad){ var inp=firstBad.querySelector('input,select'); if(inp)inp.focus(); } return; }
+    success.classList.add('show');
+    success.scrollIntoView({behavior:'smooth',block:'center'});
+    form.querySelectorAll('input,textarea').forEach(function(i){i.value='';});
+    setTimeout(function(){ success.classList.remove('show'); },6000);
+  });
+})();
+</script>
+</body>
+</html>
