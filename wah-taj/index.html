@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wah! Taj Grill &amp; Bowls — Indo-Pak Fusion · Mt Prospect, IL</title>
+<meta name="description" content="Wah! Taj Grill & Bowls — flavorful Indo-Pak fusion food in Mt Prospect, IL. Biryani, chicken 65, butter chicken, grilled platters, kabab rolls & more. Dine-in, takeout & delivery." />
+<meta name="theme-color" content="#05060e" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body id="top">
+
+<!-- ambient backdrop layers -->
+<div class="bg-fx" aria-hidden="true">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+  <div class="grid-overlay"></div>
+  <div class="noise"></div>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand" aria-label="Wah! Taj home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 44 44" width="40" height="40"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset=".5" stop-color="#6d8bff"/><stop offset="1" stop-color="#b06bff"/></linearGradient></defs>
+          <path d="M22 3l4.6 9.3 10.3 1.5-7.4 7.3 1.7 10.2L22 36.7l-9.2 4.9 1.7-10.2-7.4-7.3 10.3-1.5L22 3z" fill="none" stroke="url(#bg1)" stroke-width="2"/>
+          <circle cx="22" cy="22" r="4" fill="url(#bg1)"/>
+        </svg>
+      </span>
+      <span class="brand-text">Wah! Taj<small>Grill &amp; Bowls · Indo-Pak Fusion</small></span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <a href="#signature">Signature</a>
+      <a href="#exploded">The Biryani</a>
+      <a href="#menu">Menu</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="status-chip" id="statusChip" href="#visit"><span class="dot"></span><span id="statusText">Opens 11:30 AM</span></a>
+      <a href="https://www.grubhub.com/" target="_blank" rel="noopener" class="btn btn-neon">Order Online</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <canvas id="net" class="hero-canvas" aria-hidden="true"></canvas>
+  <div class="helix" id="helix" aria-hidden="true"></div>
+
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="rate-pill">★ 4.7</span> 652 reviews · Mt Prospect, IL</span>
+      <h1 class="hero-title">
+        <span class="line"><span>The Future of</span></span>
+        <span class="line grad"><span>Indo-Pak Flavor</span></span>
+      </h1>
+      <p class="hero-sub">Biryani layered like clockwork. Chicken 65 with a neon kick. Butter chicken, grilled platters &amp; kabab rolls — fresh, generous, and engineered for flavor at Wah! Taj Grill &amp; Bowls.</p>
+      <div class="hero-actions">
+        <a href="#menu" class="btn btn-neon">Explore the Menu <span class="arrow">→</span></a>
+        <a href="https://www.grubhub.com/" target="_blank" rel="noopener" class="btn btn-glass">Order for Delivery</a>
+      </div>
+      <ul class="hero-tags" aria-label="Service options">
+        <li>Dine-in</li><li>Takeout</li><li>Delivery</li><li>$10–20 / person</li>
+      </ul>
+    </div>
+
+    <div class="hero-stage" id="heroStage">
+      <div class="dish-card glass tilt" data-tilt>
+        <div class="dish-glow"></div>
+        <div class="dish-plate">
+          <svg viewBox="0 0 220 220" width="100%" aria-hidden="true">
+            <defs>
+              <radialGradient id="plate" cx="50%" cy="42%" r="60%"><stop offset="0" stop-color="#1a2340"/><stop offset="1" stop-color="#0a0e1f"/></radialGradient>
+              <linearGradient id="rice" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7e6"/><stop offset="1" stop-color="#f4d58d"/></linearGradient>
+            </defs>
+            <circle cx="110" cy="110" r="100" fill="url(#plate)" stroke="#2b3566" stroke-width="2"/>
+            <ellipse cx="110" cy="112" rx="74" ry="66" fill="url(#rice)" opacity=".96"/>
+            <g fill="#c2410c"><circle cx="86" cy="96" r="9"/><circle cx="132" cy="104" r="10"/><circle cx="108" cy="132" r="9"/><circle cx="96" cy="124" r="6"/></g>
+            <g fill="#16a34a" opacity=".9"><circle cx="120" cy="86" r="4"/><circle cx="80" cy="118" r="3.5"/><circle cx="138" cy="128" r="4"/></g>
+            <g fill="#f59e0b"><circle cx="100" cy="100" r="3"/><circle cx="124" cy="120" r="3"/><circle cx="90" cy="138" r="2.6"/></g>
+          </svg>
+        </div>
+        <div class="dish-meta">
+          <div class="dish-name">Chicken Biryani</div>
+          <div class="dish-price">$16.99 · <span>Signature</span></div>
+        </div>
+        <div class="steam"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <a class="scroll-cue" href="#signature" aria-label="Scroll down"><span>Scroll</span><span class="cue-line"></span></a>
+</section>
+
+<!-- ===================== MARQUEE ===================== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- ===================== SIGNATURE / FEATURED ===================== -->
+<section class="section" id="signature">
+  <div class="wrap">
+    <header class="head reveal">
+      <span class="eyebrow center">Crowd Favorites</span>
+      <h2 class="title">Signature <span class="grad">Dishes</span></h2>
+      <p class="lede">The plates our guests rave about — biryani, chicken 65, and butter chicken lead the way, with grilled platters close behind.</p>
+    </header>
+    <div class="feature-grid" id="featureGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== EXPLODED VIEW ===================== -->
+<section class="exploded" id="exploded">
+  <div class="exploded-track">
+    <div class="exploded-stage">
+      <div class="wrap exploded-inner">
+        <div class="exploded-copy">
+          <span class="eyebrow">Anatomy of a Signature</span>
+          <h2 class="title">The Biryani,<br><span class="grad">Deconstructed</span></h2>
+          <p class="lede">Scroll to pull apart our Chicken Biryani — six layers of aromatic basmati, spiced chicken, crisped onions, saffron, fresh herbs, and whole spices, assembled the traditional way.</p>
+          <div class="exploded-progress"><span id="explodedBar"></span></div>
+        </div>
+        <div class="exploded-visual" id="explodedVisual">
+          <div class="layer" data-layer="0" style="--c:#f5e6c8"><span class="layer-tag">Basmati Rice</span></div>
+          <div class="layer" data-layer="1" style="--c:#d97706"><span class="layer-tag">Spiced Chicken</span></div>
+          <div class="layer" data-layer="2" style="--c:#b45309"><span class="layer-tag">Birista (Fried Onion)</span></div>
+          <div class="layer" data-layer="3" style="--c:#fbbf24"><span class="layer-tag">Saffron &amp; Ghee</span></div>
+          <div class="layer" data-layer="4" style="--c:#22c55e"><span class="layer-tag">Mint &amp; Coriander</span></div>
+          <div class="layer" data-layer="5" style="--c:#a855f7"><span class="layer-tag">Whole Garam Spices</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MENU ===================== -->
+<section class="section" id="menu">
+  <div class="wrap">
+    <header class="head reveal">
+      <span class="eyebrow center">The Full Menu</span>
+      <h2 class="title">Explore <span class="grad">Everything</span></h2>
+      <p class="lede">From appetizers to desserts — filter by category or search for your favorite.</p>
+    </header>
+
+    <div class="menu-toolbar reveal">
+      <div class="menu-search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="menuSearch" type="search" placeholder="Search dishes…" aria-label="Search the menu" />
+      </div>
+      <div class="menu-tabs" id="menuTabs" role="tablist" aria-label="Menu categories"></div>
+    </div>
+
+    <div class="menu-list" id="menuList"></div>
+    <p class="menu-empty" id="menuEmpty" hidden>No dishes match your search.</p>
+  </div>
+</section>
+
+<!-- ===================== REVIEWS ===================== -->
+<section class="section reviews" id="reviews">
+  <div class="wrap">
+    <header class="head reveal">
+      <span class="eyebrow center">What Guests Say</span>
+      <h2 class="title">Loved by <span class="grad">652 Diners</span></h2>
+    </header>
+
+    <div class="rating-band glass reveal">
+      <div class="rating-score">
+        <div class="rating-num" data-count="4.7" data-decimals="1">0</div>
+        <div class="rating-stars" aria-label="4.7 out of 5 stars">★★★★★</div>
+        <div class="rating-sub"><span data-count="652">0</span> reviews</div>
+      </div>
+      <div class="rating-bars" id="ratingBars"></div>
+      <p class="rating-summary">Diners love the flavorful, fresh Indo-Pak fusion — especially the biryani, chicken 65, and butter chicken. Generous portions, fair prices, a clean welcoming room, and friendly staff.<br><small>Summarized from 652 reviews</small></p>
+    </div>
+
+    <div class="review-grid" id="reviewGrid"></div>
+    <div class="reviews-cta reveal">
+      <a href="https://wahtajindopak.com" target="_blank" rel="noopener" class="btn btn-glass">Read all 652 reviews</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VISIT ===================== -->
+<section class="section visit" id="visit">
+  <div class="wrap visit-grid">
+    <div class="reveal">
+      <span class="eyebrow">Find Us</span>
+      <h2 class="title">Visit <span class="grad">Wah! Taj</span></h2>
+      <p class="lede">Located in Golf Plaza II, Mt Prospect. Dine in, grab takeout, or order delivery — we're here to feed you.</p>
+
+      <div class="info-list">
+        <div class="info glass">
+          <span class="info-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-5.2-7-11a7 7 0 1 1 14 0c0 5.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <div><h4>Address</h4><p>1014 Elmhurst Rd, Mt Prospect, IL 60056<br><span>Located in Golf Plaza II · Plus code 23W5+P4</span></p></div>
+        </div>
+        <div class="info glass">
+          <span class="info-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+          <div><h4>Hours</h4><p id="hoursLine">Currently closed · Opens 11:30 AM<br><span>Open daily from 11:30 AM</span></p></div>
+        </div>
+        <div class="info glass">
+          <span class="info-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></span>
+          <div><h4>Call to Order</h4><p><a href="tel:+12248578156">(224) 857-8156</a><br><span><a href="https://wahtajindopak.com" target="_blank" rel="noopener">wahtajindopak.com</a></span></p></div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <a href="https://www.grubhub.com/" target="_blank" rel="noopener" class="btn btn-neon">Order on Grubhub</a>
+        <a href="tel:+12248578156" class="btn btn-glass">Call (224) 857-8156</a>
+      </div>
+      <p class="promo glass"><strong>$10 off your 1st delivery $15+</strong> via Grubhub — they eat the fees. Terms apply.</p>
+    </div>
+
+    <div class="reveal" data-d="1">
+      <form class="res-form glass" id="resForm" novalidate>
+        <h3 class="form-title">Reserve a Table</h3>
+        <p class="form-note-top">Tell us when you'd like to dine in — we'll confirm by phone.</p>
+        <div class="success-msg" id="resSuccess" role="status" aria-live="polite">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 5 5L20 7"/></svg>
+          Thanks! Your request is in — we'll call to confirm shortly.
+        </div>
+        <div class="field">
+          <label for="rname">Name <span class="req">*</span></label>
+          <input id="rname" type="text" autocomplete="name" required />
+          <span class="err">Please enter your name.</span>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="rphone">Phone <span class="req">*</span></label>
+            <input id="rphone" type="tel" inputmode="tel" autocomplete="tel" required />
+            <span class="err">Please enter a phone number.</span>
+          </div>
+          <div class="field">
+            <label for="rparty">Party size</label>
+            <select id="rparty"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="rdate">Date</label>
+            <input id="rdate" type="date" />
+          </div>
+          <div class="field">
+            <label for="rtime">Time</label>
+            <input id="rtime" type="time" value="19:00" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-neon" style="width:100%">Request Reservation <span class="arrow">→</span></button>
+        <p class="form-note">Demo form — no data is stored or sent.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <a href="#top" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" width="36" height="36"><path d="M22 3l4.6 9.3 10.3 1.5-7.4 7.3 1.7 10.2L22 36.7l-9.2 4.9 1.7-10.2-7.4-7.3 10.3-1.5L22 3z" fill="none" stroke="url(#bg1)" stroke-width="2"/><circle cx="22" cy="22" r="4" fill="url(#bg1)"/></svg>
+        </span>
+        <span class="brand-text">Wah! Taj<small>Grill &amp; Bowls</small></span>
+      </a>
+      <p>Indo-Pak fusion food, made fresh and served generously in Mt Prospect, IL.</p>
+    </div>
+    <div class="foot-col"><h5>Explore</h5><a href="#signature">Signature</a><a href="#menu">Menu</a><a href="#reviews">Reviews</a><a href="#visit">Visit</a></div>
+    <div class="foot-col"><h5>Order</h5><a href="https://www.grubhub.com/" target="_blank" rel="noopener">Delivery</a><a href="#menu">Takeout</a><a href="#visit">Dine-in</a><a href="tel:+12248578156">Call us</a></div>
+    <div class="foot-col"><h5>Visit</h5><a href="#visit">1014 Elmhurst Rd</a><a href="#visit">Mt Prospect, IL</a><a href="https://wahtajindopak.com" target="_blank" rel="noopener">wahtajindopak.com</a></div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© 2026 Wah! Taj Grill &amp; Bowls. All rights reserved.</span>
+    <span>Indo-Pak Fusion · Mt Prospect, Illinois</span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
