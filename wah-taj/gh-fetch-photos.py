@@ -55,6 +55,23 @@ SEARCH_QUERIES = [
     "indian food images dataset cnn",
     "food classification indian dishes dataset",
     "pakistani food image dataset",
+    "indian food recognition deep learning",
+    "food image dataset biryani",
+    "topic:indian-food",
+    "topic:food-classification",
+]
+
+# repos worth probing directly (the tree call reveals if they actually commit images)
+SEED_REPOS = [
+    "rajistics/indian_food_images",
+    "Marcus-Arcadius/indian-food-dataset",
+    "anjanatiha/Food-Image-Classification",
+    "theeyeschico/indian-food-classification",
+    "abhishekjani123/Indian-Food-Image-Classification",
+    "saanchitaa/Food-Classification",
+    "kmkarakaya/Deep-Learning-Food-Image-Recognition",
+    "stratospark/food-101-keras",
+    "monkeydj/food-classification",
 ]
 
 def api(url):
@@ -76,8 +93,10 @@ def api(url):
 
 def search_repos():
     seen, repos = set(), []
+    for fn in SEED_REPOS:
+        seen.add(fn); repos.append((fn, "main"))
     for q in SEARCH_QUERIES:
-        url = "https://api.github.com/search/repositories?q=" + urllib.request.quote(q) + "&sort=stars&per_page=12"
+        url = "https://api.github.com/search/repositories?q=" + urllib.request.quote(q) + "&sort=stars&per_page=25"
         try:
             for item in api(url).get("items", []):
                 fn = item["full_name"]
@@ -85,17 +104,20 @@ def search_repos():
                     seen.add(fn); repos.append((fn, item.get("default_branch", "main")))
         except Exception as e:
             print("  search failed (%s): %s" % (q, e), flush=True)
-        time.sleep(1)
+        time.sleep(2)
     return repos
 
 def get_image_tree(full_name, branch):
-    url = "https://api.github.com/repos/%s/git/trees/%s?recursive=1" % (full_name, branch)
-    try:
-        data = api(url)
-    except Exception:
-        return None
-    if data.get("truncated"):
-        pass  # still usable, just partial
+    data = None
+    for br in [branch, "master", "main"]:
+        try:
+            data = api("https://api.github.com/repos/%s/git/trees/%s?recursive=1" % (full_name, br))
+            branch = br
+            break
+        except Exception:
+            continue
+    if not data:
+        return None, None
     folders = {}  # norm(folder) -> [paths]
     for n in data.get("tree", []):
         if n.get("type") != "blob": continue
@@ -106,7 +128,7 @@ def get_image_tree(full_name, branch):
         fname  = norm(parts[-1])
         folders.setdefault(folder, []).append(p)
         folders.setdefault("file::"+fname, []).append(p)  # filename-based fallback
-    return folders
+    return branch, folders
 
 def raw_url(full_name, branch, path):
     return "https://raw.githubusercontent.com/%s/%s/%s" % (full_name, branch, urllib.request.quote(path))
@@ -153,12 +175,12 @@ def main():
     # score repos by how many target keywords they can satisfy
     trees = []
     for fn, br in repos:
-        folders = get_image_tree(fn, br)
+        wbr, folders = get_image_tree(fn, br)
         if not folders: continue
         score = sum(1 for kws, _ in TARGETS if find_in_folders(folders, kws))
         if score:
-            trees.append((score, fn, br, folders))
-            print("  %-55s images-folders match=%d" % (fn, score), flush=True)
+            trees.append((score, fn, wbr, folders))
+            print("  %-55s images-folders match=%d (branch=%s, imgs=%d)" % (fn, score, wbr, sum(len(v) for k,v in folders.items() if not k.startswith('file::'))), flush=True)
         time.sleep(0.6)
     trees.sort(reverse=True, key=lambda t: t[0])
     if not trees:
