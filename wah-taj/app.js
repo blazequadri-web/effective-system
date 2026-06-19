@@ -22,7 +22,7 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").re
 function slugify(s){return String(s).toLowerCase().replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");}
 function photoEl(slug, name, cls){
   return '<div class="photo'+(cls?" "+cls:"")+'" data-name="'+esc(name)+'">'+
-    '<img src="images/'+slug+'.jpg" alt="'+esc(name)+'" loading="lazy" onerror="this.remove()"></div>';
+    '<img src="images/'+slug+'.jpg" alt="'+esc(name)+'" loading="lazy" decoding="async" onerror="this.remove()"></div>';
 }
 
 /* ============================================================
